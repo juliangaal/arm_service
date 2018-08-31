@@ -1,0 +1,4 @@
+string instruction
+anchor_msgs/Anchor goal_anchor
+---
+bool status
