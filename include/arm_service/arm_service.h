@@ -16,7 +16,13 @@
 #define PROJECT_ARM_SERVICE_H
 
 #include <ros/ros.h>
-#include <jaco_manipulation/jaco_manipulation_client.h>
+#include <anchor_msgs/Anchor.h>
+#include <geometry_msgs/Point.h>
+#include <arm_service/ArmInstruction.h>
+#include <jaco_manipulation/client/jaco_manipulation_client.h>
+#include <memory>
+
+namespace arm_service {
 
 class ArmService {
  public:
@@ -26,9 +32,15 @@ class ArmService {
  private:
   jaco_manipulation::client::JacoManipulationClient jmc_;
   ros::NodeHandle nh_;
-  jaco_manipulation::BoundingBox current_box_;
+  anchor_msgs::Anchor current_anchor_;
   ros::ServiceServer service_;
 
+  const jaco_manipulation::BoundingBox createGraspBoundingBox(const anchor_msgs::Anchor &anchor);
+
+  const jaco_manipulation::BoundingBox createDropBoundingBox(const geometry_msgs::Point &point);
+
+  bool processGoal(arm_service::ArmInstruction::Request &req, arm_service::ArmInstruction::Response &res);
 };
+} // namespace arm_service
 
 #endif //PROJECT_ARM_SERVICE_H
