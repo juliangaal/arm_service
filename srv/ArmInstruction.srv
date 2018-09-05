@@ -1,4 +1,5 @@
 string instruction
 anchor_msgs/Anchor goal_anchor
+geometry_msgs/Point target_location
 ---
 bool status

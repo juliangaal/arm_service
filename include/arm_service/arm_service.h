@@ -15,7 +15,7 @@
 #ifndef PROJECT_ARM_SERVICE_H
 #define PROJECT_ARM_SERVICE_H
 
-#include "ros/ros.h"
+#include <ros/ros.h>
 #include <jaco_manipulation/jaco_manipulation_client.h>
 
 class ArmService {
@@ -23,6 +23,11 @@ class ArmService {
   ArmService();
   ~ArmService() = default;
 
+ private:
+  jaco_manipulation::client::JacoManipulationClient jmc_;
+  ros::NodeHandle nh_;
+  jaco_manipulation::BoundingBox current_box_;
+  ros::ServiceServer service_;
 
 };
 
