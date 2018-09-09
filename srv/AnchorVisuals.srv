@@ -1,0 +1,4 @@
+string instruction
+anchor_msgs/AnchorArray anchors
+---
+bool status

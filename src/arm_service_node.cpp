@@ -13,15 +13,28 @@
 */
 
 #include <arm_service/arm_service.h>
+#include <arm_service/visuals/visuals_updater.h>
+#include <jaco_manipulation/PlanAndMoveArmGoal.h>
+#include <actionlib/client/simple_action_client.h>
+#include <jaco_manipulation/PlanAndMoveArmAction.h>
 
 using namespace arm_service;
+using JacoActionClient = actionlib::SimpleActionClient<jaco_manipulation::PlanAndMoveArmAction>;
 
 int main(int argc, char **argv) {
   ros::init(argc, argv, "arm_service_server");
 
+  ROS_INFO("Trying to connect to Jaco");
+
+  JacoActionClient jaco_conn("plan_and_move_arm", true);
+  jaco_conn.waitForServer();
+
   ROS_INFO("Starting Arm Service");
   ArmService arm;
-
+  
+  ROS_INFO("Starting Visuals Updater");
+  visuals::VisualsUpdater viz;
+  
   ros::spin();
 
   return 0;

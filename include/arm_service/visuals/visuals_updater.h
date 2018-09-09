@@ -12,34 +12,39 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef PROJECT_ARM_SERVICE_H
-#define PROJECT_ARM_SERVICE_H
+#ifndef PROJECT_VISUALS_UPDATER_H
+#define PROJECT_VISUALS_UPDATER_H
 
 #include <ros/node_handle.h>
 #include <anchor_msgs/Anchor.h>
-#include <geometry_msgs/Point.h>
-#include <arm_service/ArmInstruction.h>
+#include <anchor_msgs/AnchorArray.h>
+#include <arm_service/AnchorVisuals.h>
+#include <jaco_manipulation/BoundingBox.h>
 #include <jaco_manipulation/client/jaco_manipulation_client.h>
 
 namespace arm_service {
+namespace visuals {
 
-class ArmService {
+class VisualsUpdater {
  public:
-  ArmService();
-  ~ArmService() = default;
+  VisualsUpdater();
+  ~VisualsUpdater() = default;
 
  private:
-  jaco_manipulation::client::JacoManipulationClient jmc_;
   ros::NodeHandle nh_;
-  anchor_msgs::Anchor current_anchor_;
+
+  anchor_msgs::AnchorArray last_anchors_;
+
   ros::ServiceServer service_;
+  /**
+  * Jaco manipulation client
+  */
+  jaco_manipulation::client::JacoManipulationClient jmc_;
 
-  const jaco_manipulation::BoundingBox createGraspBoundingBox(const anchor_msgs::Anchor &anchor);
-
-  const jaco_manipulation::BoundingBox createDropBoundingBox(const geometry_msgs::Point &point);
-
-  bool processGoal(arm_service::ArmInstruction::Request &req, arm_service::ArmInstruction::Response &res);
+  bool processGoal(arm_service::AnchorVisuals::Request &req, arm_service::AnchorVisuals::Response &res);
+  const jaco_manipulation::BoundingBox createBoundingBox(const anchor_msgs::Anchor &anchor) const;
 };
 } // namespace arm_service
+} // namespace visuals_updater
 
-#endif //PROJECT_ARM_SERVICE_H
+#endif //PROJECT_VISUALS_UPDATER_H
