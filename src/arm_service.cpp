@@ -23,7 +23,7 @@ ArmService::ArmService() {
   ROS_INFO("Ready to receive Arm Instructions");
 }
 
-const jaco_manipulation::BoundingBox ArmService::createGraspBoundingBox(const anchor_msgs::Anchor &anchor) {
+const jaco_manipulation::BoundingBox ArmService::createGraspBoundingBox(const anchor_msgs::Anchor &anchor) const {
   jaco_manipulation::BoundingBox box;
 
   box.header.frame_id = "base_link";
@@ -31,15 +31,13 @@ const jaco_manipulation::BoundingBox ArmService::createGraspBoundingBox(const an
   box.point = anchor.position.data.pose.position;
   box.point.x += anchor.shape.data.x * 0.5; // correction: centroid is infront of bounding box from kinect
   box.dimensions = anchor.shape.data;
-  current_anchor_ = anchor;
   return box;
 }
 
-const jaco_manipulation::BoundingBox ArmService::createDropBoundingBox(const geometry_msgs::Point &point) {
+const jaco_manipulation::BoundingBox ArmService::createDropBoundingBox(const geometry_msgs::Point &point) const {
   jaco_manipulation::BoundingBox box;
   const auto &anchor = current_anchor_;
 
-  // TODO check id of drop object
   box.header.frame_id = "base_link";
   box.description = anchor.id;
   box.point = point;
@@ -56,12 +54,12 @@ bool ArmService::processGoal(arm_service::ArmInstruction::Request &req, arm_serv
 
   if (instruction == "pick") {
     const jaco_manipulation::BoundingBox box = createGraspBoundingBox(anchor);
+    current_anchor_ = anchor;
     jmc_.graspAt(box, description);
   } else {
     const jaco_manipulation::BoundingBox box = createDropBoundingBox(target_location);
     jmc_.dropAt(box, description);
   }
-//  res.status = true;
 
   return true;
 }

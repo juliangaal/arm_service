@@ -18,6 +18,7 @@
 #include <ros/node_handle.h>
 #include <anchor_msgs/Anchor.h>
 #include <anchor_msgs/AnchorArray.h>
+#include <arm_service/arm_service.h>
 #include <arm_service/AnchorVisuals.h>
 #include <jaco_manipulation/BoundingBox.h>
 #include <jaco_manipulation/client/jaco_manipulation_client.h>
@@ -25,24 +26,43 @@
 namespace arm_service {
 namespace visuals {
 
-class VisualsUpdater {
+class VisualsUpdater : ArmService {
  public:
+
+  /**
+   * Constructor
+   */
   VisualsUpdater();
+
+  /**
+   * Destructor
+   */
   ~VisualsUpdater() = default;
 
  private:
+
+  /**
+   * ROS node handle
+   */
   ros::NodeHandle nh_;
 
-  anchor_msgs::AnchorArray last_anchors_;
-
+  /**
+   * AnchorVisuals service
+   */
   ros::ServiceServer service_;
+
   /**
   * Jaco manipulation client
   */
   jaco_manipulation::client::JacoManipulationClient jmc_;
 
+  /**
+   * Processes AnchorVisuals
+   * @param req AnchorVisuals Request
+   * @param res AnchorVisuals Response
+   * @return status, in our case always true, feedback will come from jaco_manipulation_server
+   */
   bool processGoal(arm_service::AnchorVisuals::Request &req, arm_service::AnchorVisuals::Response &res);
-  const jaco_manipulation::BoundingBox createBoundingBox(const anchor_msgs::Anchor &anchor) const;
 };
 } // namespace arm_service
 } // namespace visuals_updater

@@ -23,21 +23,65 @@
 
 namespace arm_service {
 
+/**
+ * Used to communicate with Jaco Robotic Arm with ReGround Syntax
+ */
 class ArmService {
  public:
+  /**
+   * Constructor
+   */
   ArmService();
-  ~ArmService() = default;
+
+  /**
+   * Destructor
+   */
+  virtual ~ArmService() = default;
+
+ protected:
+
+  /**
+  * Creates Bounding Box for grasping from anchor msg
+  * @param anchor to be grasped
+  * @return jaco_manipulation::BoundingBox
+  */
+  const jaco_manipulation::BoundingBox createGraspBoundingBox(const anchor_msgs::Anchor &anchor) const;
 
  private:
+
+  /**
+   * Jaco Manipulation client
+   */
   jaco_manipulation::client::JacoManipulationClient jmc_;
+
+  /**
+   * ROS Nodehandler
+   */
   ros::NodeHandle nh_;
+
+  /**
+   * Current anchor: saved for dropping
+   */
   anchor_msgs::Anchor current_anchor_;
+
+  /**
+   * ROS Service, see ../srv/ArmInstruction.srv
+   */
   ros::ServiceServer service_;
 
-  const jaco_manipulation::BoundingBox createGraspBoundingBox(const anchor_msgs::Anchor &anchor);
+  /**
+   * Creates Bounding Box for drop
+   * @param point to be dropped at
+   * @return jaco_manipulation::BoundingBox
+   */
+  const jaco_manipulation::BoundingBox createDropBoundingBox(const geometry_msgs::Point &point) const;
 
-  const jaco_manipulation::BoundingBox createDropBoundingBox(const geometry_msgs::Point &point);
-
+  /**
+   * Processes goal received by ArmInstruction service
+   * @param req ArmInstruction request
+   * @param res ArmInstrcuction response
+   * @return
+   */
   bool processGoal(arm_service::ArmInstruction::Request &req, arm_service::ArmInstruction::Response &res);
 };
 } // namespace arm_service

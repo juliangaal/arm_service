@@ -14,7 +14,6 @@
 
 #include <arm_service/arm_service.h>
 #include <arm_service/visuals/visuals_updater.h>
-#include <jaco_manipulation/PlanAndMoveArmGoal.h>
 #include <actionlib/client/simple_action_client.h>
 #include <jaco_manipulation/PlanAndMoveArmAction.h>
 

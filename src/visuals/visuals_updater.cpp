@@ -24,9 +24,8 @@ VisualsUpdater::VisualsUpdater() {
 bool VisualsUpdater::processGoal(arm_service::AnchorVisuals::Request &req, arm_service::AnchorVisuals::Response &res) {
   if (req.instruction == "add") {
     for (const auto &anchor: req.anchors.anchors) {
-      jmc_.updatePlanningScene(createBoundingBox(anchor));
+      jmc_.updatePlanningScene(ArmService::createGraspBoundingBox(anchor));
     }
-    last_anchors_ = req.anchors;
   } else if (req.instruction == "wipe") {
     jmc_.wipePlanningScene();
   } else {
@@ -34,15 +33,4 @@ bool VisualsUpdater::processGoal(arm_service::AnchorVisuals::Request &req, arm_s
   }
 
   return true;
-}
-
-const jaco_manipulation::BoundingBox VisualsUpdater::createBoundingBox(const anchor_msgs::Anchor &anchor) const {
-  jaco_manipulation::BoundingBox box;
-
-  box.header.frame_id = "base_link";
-  box.description = anchor.id;
-  box.point = anchor.position.data.pose.position;
-  box.point.x += anchor.shape.data.x * 0.5; // correction: centroid is infront of bounding box from kinect
-  box.dimensions = anchor.shape.data;
-  return box;
 }
