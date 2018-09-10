@@ -30,9 +30,14 @@ class VisualsUpdater : ArmService {
  public:
 
   /**
+   * Delete default constructor
+   */
+  VisualsUpdater() = delete;
+
+  /**
    * Constructor
    */
-  VisualsUpdater();
+  VisualsUpdater(std::string name);
 
   /**
    * Destructor

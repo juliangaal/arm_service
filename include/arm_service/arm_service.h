@@ -28,10 +28,12 @@ namespace arm_service {
  */
 class ArmService {
  public:
+
   /**
-   * Constructor
+   * constructor
+   * @param name of the service
    */
-  ArmService();
+  ArmService(std::string name);
 
   /**
    * Destructor
@@ -39,6 +41,11 @@ class ArmService {
   virtual ~ArmService() = default;
 
  protected:
+
+  /**
+   * Constructor
+   */
+  ArmService() = default;
 
   /**
   * Creates Bounding Box for grasping from anchor msg

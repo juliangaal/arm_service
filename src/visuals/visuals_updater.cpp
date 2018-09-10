@@ -16,7 +16,7 @@
 
 using namespace arm_service::visuals;
 
-VisualsUpdater::VisualsUpdater() {
+VisualsUpdater::VisualsUpdater(std::string name) {
   service_ = nh_.advertiseService("visuals_updater", &VisualsUpdater::processGoal, this);
   ROS_INFO("Ready to receive Anchors to display");
 }

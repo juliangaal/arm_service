@@ -18,8 +18,8 @@
 
 using namespace arm_service;
 
-ArmService::ArmService() {
-  service_ = nh_.advertiseService("arm_service", &ArmService::processGoal, this);
+ArmService::ArmService(std::string name) {
+  service_ = nh_.advertiseService(name, &ArmService::processGoal, this);
   ROS_INFO("Ready to receive Arm Instructions");
 }
 

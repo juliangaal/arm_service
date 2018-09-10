@@ -21,7 +21,7 @@ using namespace arm_service;
 using JacoActionClient = actionlib::SimpleActionClient<jaco_manipulation::PlanAndMoveArmAction>;
 
 int main(int argc, char **argv) {
-  ros::init(argc, argv, "arm_service_server");
+  ros::init(argc, argv, "arm_service_node");
 
   ROS_INFO("Trying to connect to Jaco");
 
@@ -29,10 +29,10 @@ int main(int argc, char **argv) {
   jaco_conn.waitForServer();
 
   ROS_INFO("Starting Arm Service");
-  ArmService arm;
+  ArmService arm("arm_service");
   
   ROS_INFO("Starting Visuals Updater");
-  visuals::VisualsUpdater viz;
+  visuals::VisualsUpdater viz("visuals_updater");
   
   ros::spin();
 
