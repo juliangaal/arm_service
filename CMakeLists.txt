@@ -33,62 +33,22 @@ find_package(catkin REQUIRED COMPONENTS
    geometry_msgs
  )
 
-###################################
-## catkin specific configuration ##
-###################################
-## The catkin_package macro generates cmake config files for your package
-## Declare things to be passed to dependent projects
-## INCLUDE_DIRS: uncomment this if your package contains header files
-## LIBRARIES: libraries you create in this project that dependent projects also need
-## CATKIN_DEPENDS: catkin_packages dependent projects also need
-## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
   LIBRARIES arm_service
   CATKIN_DEPENDS anchor_msgs jaco_manipulation message_generation roscpp rospy std_msgs geometry_msgs
-#  DEPENDS system_lib
-)
-
-###########
-## Build ##
-###########
-
-## Specify additional locations of header files
-## Your package locations should be listed before other locations
-include_directories(
-    include
-  ${catkin_INCLUDE_DIRS}
 )
 
 ### Declare a C++ library
-add_library(${PROJECT_NAME}
-            src/arm_service.cpp
-)
-
-add_library(visuals_updater
-            src/visuals/visuals_updater.cpp
-)
-
-### Add cmake target dependencies of the library
-### as an example, code may need to be generated before libraries
-### either from message generation or dynamic reconfigure
+add_library(${PROJECT_NAME} src/arm_service.cpp)
+target_include_directories(${PROJECT_NAME} PUBLIC include ${catkin_INCLUDE_DIRS})
 add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES})
+
+add_library(visuals_updater src/visuals/visuals_updater.cpp)
+target_include_directories(visuals_updater PUBLIC include ${catkin_INCLUDE_DIRS})
 add_dependencies(visuals_updater ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
-## Declare a C++ executable
-## With catkin_make all packages are built within a single CMake context
-## The recommended prefix ensures that target names across packages don't collide
 add_executable(${PROJECT_NAME}_node src/arm_service_node.cpp)
-
-## Add cmake target dependencies of the executable
-## same as for the library above
+target_include_directories(${PROJECT_NAME}_node PUBLIC include ${catkin_INCLUDE_DIRS})
 add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-
-## Specify libraries to link a library or executable target against
-target_link_libraries(${PROJECT_NAME}
-                      ${catkin_LIBRARIES})
-
-target_link_libraries(${PROJECT_NAME}_node
-  arm_service
-  visuals_updater
-  ${catkin_LIBRARIES})
+target_link_libraries(${PROJECT_NAME}_node arm_service visuals_updater ${catkin_LIBRARIES})
