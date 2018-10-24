@@ -30,6 +30,7 @@ const jaco_manipulation::BoundingBox ArmService::createGraspBoundingBox(const an
   box.description = anchor.id;
   box.point = anchor.position.data.pose.position;
   box.point.x += anchor.shape.data.x * 0.5; // correction: centroid is infront of bounding box from kinect
+  // z doesn't have to be adjusted, it is already in the center of the plain
   box.dimensions = anchor.shape.data;
   return box;
 }
@@ -41,6 +42,7 @@ const jaco_manipulation::BoundingBox ArmService::createDropBoundingBox(const geo
   box.header.frame_id = "base_link";
   box.description = anchor.id;
   box.point = point;
+  // z needs to be added, target is only x pos and y pos
   box.point.z += anchor.shape.data.x * 0.5;
   box.dimensions = anchor.shape.data;
   return box;
